@@ -4,17 +4,15 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <link rel="stylesheet" href="css/misc.css">
   <link rel="stylesheet" href="css/style.css">
-  <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
-
-  <title></title> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.45/vue.global.prod.min.js"></script>
+  <title></title>
 </head>
 <body>
-  <div class="menu">
-    <div class="notify" :class="{active: enable}">
-      <h1>{{title}}</h1>
+  <div class="menu" v-if="enable">
+    <div class="notify">
+      <h1><i class="fa-solid fa-heart-crack"></i> {{title}}</h1>
       <h2>{{text}}<span>{{time}} seconds</span></h2>
     </div>
   </div>
