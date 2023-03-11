@@ -1,43 +1,64 @@
-.notify {
-  position: absolute;
-  left: 50%;
-  top: -10%;
-  transform: translateX(-50%);
-  padding: calc(var(--piv) * 10) calc(var(--piv) * 20);
-  background-color: rgba(40, 41, 43, 0.8);
-  border: calc(var(--piv) * 8) solid rgba(255, 255, 255, 0);
-  box-shadow: inset 0 0 calc(var(--piv) * 36) rgba(52, 52, 52, 0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transition: .15s;
-  z-index: 999;
-  border-radius: calc(var(--piv) * 8);
-  }
-  
-  .notify.active {
-  top: calc(var(--piv) * 72);
-  }
-  
-  .notify h1 {
-  font-weight: 700;
-  font-size: calc(var(--piv) * 15);
-  color: #3EFFA2;
-  text-shadow: 0 0 calc(var(--piv) * 33) #3EFFA2;
-  margin: 0;
-  }
-  
-  .notify h2 {
-  font-weight: 400;
-  font-size: 12px;
-  display: inline-flex;
-  align-items: center;
-  gap: calc(var(--piv) * 5);
-  color: rgba(255, 255, 255, 0.55);
-  margin: 0;
-  }
-  
-  .notify h2 span {
-  color: white;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+ :root{
+     --piv: 0.09259259259259259vh;
+}
+html,body{
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+     font-family: 'Inter', sans-serif;
+     color: #fff;
+     user-select: none;
+}
+ .notify {
+     position: absolute;
+     left: 50%;
+     top: -10%;
+     transform: translateX(-50%);
+     padding: calc(var(--piv) * 10) calc(var(--piv) * 20);
+     background-color: rgba(40, 41, 43, 0.8);
+     border: calc(var(--piv) * 8) solid rgba(255, 255, 255, 0);
+     box-shadow: inset 0 0 calc(var(--piv) * 36) rgba(52, 52, 52, 0.1);
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     transition: .15s;
+     z-index: 999;
+     border-radius: calc(var(--piv) * 8);
+}
+ .notify.active {
+     top: calc(var(--piv) * 72);
+}
+ .notify h1 {
+     font-weight: 700;
+     font-size: calc(var(--piv) * 15);
+     color: #3EFFA2;
+     text-shadow: 0 0 calc(var(--piv) * 33) #3EFFA2;
+     margin: 0;
+     animation: beat .60s infinite alternate;
+	transform-origin: center;
+}
+
+.notify h1 i {
+     font-size: calc(var(--piv) * 15);
+     color: #3EFFA2;
+     text-shadow: 0 0 calc(var(--piv) * 33) #3EFFA2;
+     margin: 1px;
+}
+ .notify h2 {
+     font-weight: 400;
+     font-size: 12px;
+     display: inline-flex;
+     align-items: center;
+     gap: calc(var(--piv) * 5);
+     color: rgba(255, 255, 255, 0.55);
+     margin: 0;
+}
+ .notify h2 span {
+     color: #fff;
+}
+
+@keyframes beat{
+	to { transform: scale(0.8); }
+}

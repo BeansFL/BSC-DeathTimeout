@@ -1,76 +1,69 @@
-const app = new Vue({
-  el: '.menu',
-  data: {
-    enable: false,
-    title: "",
-    text: "", 
-    time: 0,
-    timer: null,
-    audio: null, 
+const deathTimeOut = Vue.createApp({
+  data() {
+      return {
+          enable: false,
+          title: "",
+          text: "",
+          time: 0,
+          timer: null,
+          audio: new Audio('/html/sound/heartbeat.mp3'),
+      }
   },
   methods: {
-    startTimer(title, text, time) {
-      this.audio = new Audio('/html/sound/heartbeat.mp3');  // remove if you want to disable sounds
-      this.audio.loop = true; // remove if you want to disable sounds
-      this.audio.play() // remove if you want to disable sounds
-      if( this.timer != null) return ;
-      this.title = title;
-      this.text = text;
-      this.time = time; 
-      this.enable = true  
-      this.timer = setInterval( () => {
-        this.time--; 
-        if( this.time <= 0 ) { 
-          this.endTimer()
-          this.audio.loop = false; 
-          this.audio.pause()  
-        }
-      }, 1000)
-    },
-    startDispatch(title, text, time) {
-      if( this.timer != null) return ;
-      this.title = title;
-      this.text = text;
-      this.time = time;
-      this.enable = true
-
-      this.timer = setInterval( () => {
-        this.time--;
-        if( this.time <= 0 ) {
-          this.endTimer()
-        }
-      }, 1000)
-    },
-    endTimer() {
-      this.enable = false;
-      fetch(`https://${GetParentResourceName()}/finished`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({})
-      })
-      clearInterval(this.timer);
-      this.timer = null;
-    }
+      startNui(text, settings) {
+          this.title = text.title;
+          this.text = text.content;
+          this.time = settings.time;
+          this.enable = true
+          this.deathSound(settings.sounds)
+          this.startTimer()
+      },
+      startTimer() {
+          this.timer = setInterval(() => {
+              this.time--;
+              if (this.time <= 0) {
+                  this.endTimer()
+              }
+          }, 1000)
+      },
+      endTimer() {
+          this.deathSound(false)
+          this.enable = false;
+          fetch(`https://${GetParentResourceName()}/finished`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+          })
+          clearInterval(this.timer);
+          this.timer = null;
+      },
+      deathSound(bool) {
+          if (bool) {
+              this.audio.loop = true;
+              this.audio.play()
+          } else {
+              this.audio.loop = false;
+              this.audio.pause()
+          }
+      },
+      eventHandler(e) {
+          const data = e.data;
+          switch (data.type) {
+              case "startTimer":
+                  this.startNui(data.text, data.settings);
+                  break;
+              case "stopTimer":
+                  this.endTimer()
+                  break;
+          }
+      }
   },
   mounted() {
-    window.addEventListener("message", async (e) => {
-      const data = e.data;
-
-      switch(data.type){
-        case "startTimer":
-          this.startTimer(data.title, data.text, data.time);
-          break;
-        case "stopTimer":
-
-          this.endTimer() 
-          if (this.audio) {  // remove if you want to disable sounds
-            this.audio.loop = false; // remove if you want to disable sounds
-            this.audio.pause() // remove if you want to disable sounds
-          }
-          break;
-      }
-
-  })
-  }
-})
- 
+      window.addEventListener('message', this.eventHandler);
+  },
+  beforeUnmount() {
+      window.removeEventListener('message', this.eventHandler);
+  },
+}).mount('body');
